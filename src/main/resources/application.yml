@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: cloud-file-manager
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:development}
