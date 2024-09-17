@@ -7,7 +7,10 @@ import com.github.cloudfilemanager.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -59,6 +62,11 @@ public class FileService {
         String bucketName = cloudConfiguration.getBucketName();
 
         return String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<FileEntity> getFilesMetadata(Pageable pageable) {
+        return fileRepository.findAll(pageable);
     }
 
 }

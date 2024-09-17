@@ -1,13 +1,14 @@
 package com.github.cloudfilemanager.controller;
 
+import com.github.cloudfilemanager.dto.response.ReducedFileDto;
+import com.github.cloudfilemanager.entity.FileEntity;
 import com.github.cloudfilemanager.service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -21,6 +22,17 @@ public class FileController {
     public ResponseEntity<Void> uploadFile(@RequestBody MultipartFile file) {
         fileService.uploadFile(file);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ReducedFileDto>> getDocuments(Pageable pageable) {
+        Page<FileEntity> storedFiles = fileService.getFilesMetadata(pageable);
+
+        Page<ReducedFileDto> response = storedFiles.map(file -> new ReducedFileDto(
+                file.getFileName(), file.getUploadDate(), file.getFileUrl()
+        ));
+
+        return ResponseEntity.ok(response);
     }
 
 }
