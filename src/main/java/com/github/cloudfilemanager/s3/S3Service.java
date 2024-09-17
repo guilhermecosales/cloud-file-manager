@@ -1,5 +1,6 @@
 package com.github.cloudfilemanager.s3;
 
+import com.github.cloudfilemanager.configuration.CloudConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +20,12 @@ public class S3Service {
 
     private final Logger log = LoggerFactory.getLogger(S3Service.class);
 
+    private final CloudConfiguration cloudConfiguration;
+
     private final S3Client s3Client;
 
-    public void putObject(String bucketName, String key, byte[] file) {
+    public void putObject(String key, byte[] file) {
+        String bucketName = cloudConfiguration.getBucketName();
         log.info("Uploading file to S3 bucket: {}", bucketName);
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -34,7 +38,8 @@ public class S3Service {
         log.info("File uploaded successfully to S3 bucket: {}", bucketName);
     }
 
-    public byte[] getObject(String bucketName, String keyName) {
+    public byte[] getObject(String keyName) {
+        String bucketName = cloudConfiguration.getBucketName();
         log.info("Downloading file from S3 bucket: {}", bucketName);
         GetObjectRequest objectRequest = GetObjectRequest.builder()
                 .bucket(bucketName)
