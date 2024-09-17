@@ -56,7 +56,6 @@ public class FileService {
     }
 
     private String getS3Url(String fileName) {
-        String region = cloudConfiguration.getRegion();
         String bucketName = cloudConfiguration.getBucketName();
 
         return String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName);
