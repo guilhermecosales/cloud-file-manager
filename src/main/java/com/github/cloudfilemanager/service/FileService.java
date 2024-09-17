@@ -41,21 +41,18 @@ public class FileService {
     private void saveMetadataFile(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         double fileSize = file.getSize();
+        String mimeType = file.getContentType();
 
         FileEntity newFile = FileEntity.builder()
                 .fileName(fileName)
                 .fileUrl(getS3Url(fileName))
                 .uploadDate(LocalDateTime.now())
                 .fileSize(fileSize)
-                .fileType(getFileExtension(fileName))
+                .fileType(mimeType)
                 .build();
 
         fileRepository.save(newFile);
         log.info("File metadata saved successfully.");
-    }
-
-    private String getFileExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf("."));
     }
 
     private String getS3Url(String fileName) {

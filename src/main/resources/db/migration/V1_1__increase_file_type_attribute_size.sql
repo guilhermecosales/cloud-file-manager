@@ -1,0 +1,2 @@
+ALTER TABLE files
+    ALTER COLUMN file_type TYPE VARCHAR(40);
