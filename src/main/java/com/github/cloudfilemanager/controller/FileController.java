@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/files")
@@ -31,6 +33,17 @@ public class FileController {
         Page<ReducedFileDto> response = storedFiles.map(file -> new ReducedFileDto(
                 file.getFileName(), file.getUploadDate(), file.getFileUrl()
         ));
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(params = "fileName")
+    public ResponseEntity<List<ReducedFileDto>> getFileMetadataByName(@RequestParam(name = "fileName") String fileName) {
+        List<FileEntity> storedFiles = fileService.getFileMetadataByName(fileName);
+
+        List<ReducedFileDto> response = storedFiles.stream().map(file -> new ReducedFileDto(
+                file.getFileName(), file.getUploadDate(), file.getFileUrl()
+        )).toList();
 
         return ResponseEntity.ok(response);
     }
