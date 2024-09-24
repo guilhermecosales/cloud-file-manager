@@ -82,4 +82,9 @@ public class FileService {
         return files;
     }
 
+    public byte[] downloadFile(String fileName) {
+        log.info("Downloading file: {}", fileName);
+        return s3Service.getObject(fileName);
+    }
+
 }

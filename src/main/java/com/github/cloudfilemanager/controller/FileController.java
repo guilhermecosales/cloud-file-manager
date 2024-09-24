@@ -6,8 +6,7 @@ import com.github.cloudfilemanager.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +45,17 @@ public class FileController {
         )).toList();
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/download/{fileName}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable String fileName) {
+        byte[] fileContent = fileService.downloadFile(fileName);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDisposition(ContentDisposition.builder("attachment").filename(fileName).build());
+
+        return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
     }
 
 }
