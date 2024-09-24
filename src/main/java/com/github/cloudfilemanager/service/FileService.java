@@ -84,7 +84,27 @@ public class FileService {
 
     public byte[] downloadFile(String fileName) {
         log.info("Downloading file: {}", fileName);
-        return s3Service.getObject(fileName);
+
+        FileEntity storedFile = getFileMetadataByExactName(fileName);
+
+        return s3Service.getObject(storedFile.getFileName());
+    }
+
+    @Transactional
+    public void deleteFile(String fileName) {
+        log.info("Deleting file: {}", fileName);
+
+        FileEntity storedFile = getFileMetadataByExactName(fileName);
+
+        s3Service.deleteObject(fileName);
+        fileRepository.deleteById(storedFile.getFileId());
+
+        log.info("File deleted successfully.");
+    }
+
+    private FileEntity getFileMetadataByExactName(String fileName) {
+        return fileRepository.findByFileNameIgnoreCase(fileName)
+                .orElseThrow(() -> new FileNotFoundException(fileName));
     }
 
 }

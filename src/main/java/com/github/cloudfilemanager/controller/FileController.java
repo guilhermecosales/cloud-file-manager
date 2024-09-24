@@ -58,4 +58,10 @@ public class FileController {
         return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/{fileName}")
+    public ResponseEntity<Void> deleteFile(@PathVariable String fileName) {
+        fileService.deleteFile(fileName);
+        return ResponseEntity.noContent().build();
+    }
+
 }
