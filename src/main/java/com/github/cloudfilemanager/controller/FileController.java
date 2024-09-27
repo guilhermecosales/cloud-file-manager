@@ -37,8 +37,8 @@ public class FileController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(params = "fileName")
-    public ResponseEntity<List<ReducedFileDto>> getFileMetadataByName(@RequestParam(name = "fileName") String fileName) {
+    @GetMapping(path = "{fileName}")
+    public ResponseEntity<List<ReducedFileDto>> getFileMetadataByName(@PathVariable String fileName) {
         List<FileEntity> storedFiles = fileService.getFileMetadataByName(fileName);
 
         List<ReducedFileDto> response = storedFiles.stream().map(file -> new ReducedFileDto(
