@@ -91,8 +91,6 @@ public class FileService {
     }
 
     public String downloadFileUrl(String fileName) {
-        log.info("Downloading file: {}", fileName);
-
         FileEntity storedFile = getFileMetadataByExactName(fileName);
 
         return s3Service.generatePresignedUrl(storedFile.getFileName());
