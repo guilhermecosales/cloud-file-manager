@@ -90,6 +90,14 @@ public class FileService {
         return s3Service.getObject(storedFile.getFileName());
     }
 
+    public String downloadFileUrl(String fileName) {
+        log.info("Downloading file: {}", fileName);
+
+        FileEntity storedFile = getFileMetadataByExactName(fileName);
+
+        return s3Service.generatePresignedUrl(storedFile.getFileName());
+    }
+
     @Transactional
     public void deleteFile(String fileName) {
         log.info("Deleting file: {}", fileName);

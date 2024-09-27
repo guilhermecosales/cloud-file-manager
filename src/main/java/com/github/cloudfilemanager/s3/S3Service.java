@@ -12,8 +12,12 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 import java.io.IOException;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +57,29 @@ public class S3Service {
             return response.readAllBytes();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public String generatePresignedUrl(String keyName) {
+        log.info("Generating presigned URL for file: {}", keyName);
+        try (S3Presigner presigner = S3Presigner.create()) {
+            String bucketName = cloudConfiguration.getBucketName();
+
+            GetObjectRequest objectRequest = GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(keyName)
+                    .build();
+
+            GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+                    .signatureDuration(Duration.ofMinutes(10))
+                    .getObjectRequest(objectRequest)
+                    .build();
+
+            PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(presignRequest);
+
+            log.info("Presigned URL generated successfully for file: {}", keyName);
+
+            return presignedRequest.url().toExternalForm();
         }
     }
 

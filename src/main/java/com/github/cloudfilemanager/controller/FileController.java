@@ -1,5 +1,6 @@
 package com.github.cloudfilemanager.controller;
 
+import com.github.cloudfilemanager.dto.response.FileDownloadUrlDto;
 import com.github.cloudfilemanager.dto.response.ReducedFileDto;
 import com.github.cloudfilemanager.entity.FileEntity;
 import com.github.cloudfilemanager.service.FileService;
@@ -56,6 +57,15 @@ public class FileController {
         headers.setContentDisposition(ContentDisposition.builder("attachment").filename(fileName).build());
 
         return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "/download/{fileName}/url")
+    public ResponseEntity<FileDownloadUrlDto> downloadFileUrl(@PathVariable String fileName) {
+        String downloadFileUrl = fileService.downloadFileUrl(fileName);
+        FileDownloadUrlDto response = new FileDownloadUrlDto(downloadFileUrl);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{fileName}")
