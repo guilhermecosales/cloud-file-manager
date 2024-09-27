@@ -59,7 +59,6 @@ public class FileController {
         return new ResponseEntity<>(fileContent, headers, HttpStatus.OK);
     }
 
-
     @GetMapping(path = "/download/{fileName}/url")
     public ResponseEntity<FileDownloadUrlDto> downloadFileUrl(@PathVariable String fileName) {
         String downloadFileUrl = fileService.downloadFileUrl(fileName);
