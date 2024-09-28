@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{ github.repository }}:1.0.0
+        run: docker build . --file Dockerfile --tag cloud-file-manager:1.0.0
 
       - name: Push the Docker image
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.repository }}:1.0.0
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/cloud-file-manager:1.0.0
