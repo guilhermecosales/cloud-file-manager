@@ -12,6 +12,7 @@ COPY src ./src
 # Build the project
 RUN gradle build -x test --no-daemon --refresh-dependencies
 
+# Final stage
 FROM openjdk:21-jdk-slim
 
 # Set the working directory
