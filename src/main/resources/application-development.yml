@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     open-in-view: false
@@ -10,6 +10,6 @@ spring:
 
 aws:
   region: ${AWS_REGION}
-  access-key: ${AWS_ACCESS_KEY}
-  secret-key: ${AWS_SECRET_KEY}
-  bucket-name: ${AWS_BUCKET_NAME}
+  access-key: ${AWS_ACCESS_KEY_ID}
+  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  bucket-name: ${AWS_S3_BUCKET_NAME}
