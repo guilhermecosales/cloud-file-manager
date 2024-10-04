@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test_db
+    username: sa
+    password: password
+  jpa:
+    open-in-view: false
+    show-sql: true
+
+aws:
+  region: ${AWS_REGION}
+  access-key: ${AWS_ACCESS_KEY_ID}
+  secret-key: ${AWS_SECRET_ACCESS_KEY}
+  bucket-name: ${AWS_S3_BUCKET_NAME}
