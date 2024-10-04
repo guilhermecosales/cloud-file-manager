@@ -23,9 +23,6 @@ jobs:
         with:
           gradle-version: '8.10.1'
 
-      #      - name: Grant execute permission for gradlew
-      #        run: chmod +x ./gradlew
-
       - name: Test with Gradle Wrapper
         run: gradle test
         env:
@@ -37,8 +34,6 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     needs: test
 
     steps:
@@ -49,46 +44,23 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      #      - name: Setup Gradle
-      #        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-
-      #      - name: Grant execute permission for gradlew
-      #        run: chmod +x ./gradlew
-
-
-      #      - name: Build with Gradle Wrapper
-      #        run: ./gradlew build
-      #        env:
-      #          DATABASE_URL: jdbc:postgresql://localhost:5432/test_db
-      #          DATABASE_USERNAME: test_user
-      #          DATABASE_PASSWORD: test_password
-      #          AWS_REGION: ${{ secrets.AWS_REGION }}
-      #          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-      #          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-      #          AWS_S3_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-
-      # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
-      # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
         with:
           gradle-version: '8.10.1'
 
       - name: Build with Gradle 8.10.1
-        run: gradle build
+        run: gradle build -x test
         env:
-          DATABASE_URL: jdbc:postgresql://localhost:5432/test_db
-          DATABASE_USERNAME: test_user
-          DATABASE_PASSWORD: test_password
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_S3_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
 
-
   dependency-submission:
-
     runs-on: ubuntu-latest
     permissions:
       contents: write
