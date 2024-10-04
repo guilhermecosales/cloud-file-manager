@@ -10,29 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:13
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: test_db
-        options: >-
-          --health-cmd "pg_is_ready"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          until pg_is_ready -h 127.0.0.1 -p 5432; do
-            echo "Waiting for PostgreSQL to be ready..."
-            sleep 2
-          done
-
       - uses: actions/checkout@v4
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -42,12 +20,14 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        with:
+          gradle-version: '8.10.1'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+      #      - name: Grant execute permission for gradlew
+      #        run: chmod +x ./gradlew
 
       - name: Test with Gradle Wrapper
-        run: ./gradlew test
+        run: gradle test
 
   build:
     runs-on: ubuntu-latest
@@ -55,29 +35,7 @@ jobs:
       contents: read
     needs: test
 
-    services:
-      postgres:
-        image: postgres:13
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: test_db
-        options: >-
-          --health-cmd "pg_is_ready"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          until pg_is_ready -h 127.0.0.1 -p 5432; do
-            echo "Waiting for PostgreSQL to be ready..."
-            sleep 2
-          done
-
       - uses: actions/checkout@v4
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -85,15 +43,34 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      #      - name: Setup Gradle
+      #        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+      #      - name: Grant execute permission for gradlew
+      #        run: chmod +x ./gradlew
+
+
+      #      - name: Build with Gradle Wrapper
+      #        run: ./gradlew build
+      #        env:
+      #          DATABASE_URL: jdbc:postgresql://localhost:5432/test_db
+      #          DATABASE_USERNAME: test_user
+      #          DATABASE_PASSWORD: test_password
+      #          AWS_REGION: ${{ secrets.AWS_REGION }}
+      #          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+      #          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      #          AWS_S3_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+
+      # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
+      # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        with:
+          gradle-version: '8.10.1'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-
-
-      - name: Build with Gradle Wrapper
-        run: ./gradlew build
+      - name: Build with Gradle 8.10.1
+        run: gradle build
         env:
           DATABASE_URL: jdbc:postgresql://localhost:5432/test_db
           DATABASE_USERNAME: test_user
@@ -103,16 +80,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_S3_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
 
-    # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
-    # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
-    #
-    # - name: Setup Gradle
-    #   uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-    #   with:
-    #     gradle-version: '8.9'
-    #
-    # - name: Build with Gradle 8.9
-    #   run: gradle build
 
   dependency-submission:
 
