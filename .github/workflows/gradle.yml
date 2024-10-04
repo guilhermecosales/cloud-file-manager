@@ -16,11 +16,11 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpassword
-          POSTGRES_DB: testdb
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
         options: >-
-          --health-cmd "pg_isready"
+          --health-cmd "pg_is_ready"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -61,11 +61,11 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpassword
-          POSTGRES_DB: testdb
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
         options: >-
-          --health-cmd "pg_isready"
+          --health-cmd "pg_is_ready"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -95,9 +95,9 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew build
         env:
-          DATABASE_URL: jdbc:postgresql://localhost:5432/testdb
-          DATABASE_USERNAME: testuser
-          DATABASE_PASSWORD: testpassword
+          DATABASE_URL: jdbc:postgresql://localhost:5432/test_db
+          DATABASE_USERNAME: test_user
+          DATABASE_PASSWORD: test_password
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
