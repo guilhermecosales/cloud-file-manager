@@ -2,7 +2,7 @@ spring:
   application:
     name: cloud-file-manager
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:development}
+    active: ${ACTIVE_PROFILES}
   mvc:
     problemdetails:
       enabled: true
