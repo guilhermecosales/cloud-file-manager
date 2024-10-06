@@ -27,8 +27,9 @@ jobs:
       - name: Extract version from build.gradle
         id: extract_version
         run: |
-          VERSION=$(grep '^version' build.gradle | awk '{print $2}' | tr -d "'")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          VERSION=$(grep "^version" build.gradle | sed 's/version[[:space:]]*=[[:space:]]*//g' | tr -d "'")
+          echo "VERSION=${VERSION}"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
       - name: Build and Push Image
         uses: docker/build-push-action@v6
