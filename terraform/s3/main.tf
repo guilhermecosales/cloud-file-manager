@@ -1,5 +1,10 @@
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
+}
+
+variable "region" {
+  type        = string
+  description = "The AWS region"
 }
 
 variable "bucket_name" {
