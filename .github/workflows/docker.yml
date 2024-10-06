@@ -24,8 +24,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Extract version from build.gradle
+        id: extract_version
+        run: |
+          VERSION=$(grep '^version' build.gradle | awk '{print $2}' | tr -d "'")
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Build and Push Image
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cloud-file-manager:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cloud-file-manager:${{ env.VERSION }}
