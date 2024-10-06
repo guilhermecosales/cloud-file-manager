@@ -52,6 +52,7 @@ jobs:
       - name: Build with Gradle 8.10.1
         run: gradle build -x test
         env:
+          ACTIVE_PROFILES: development
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
