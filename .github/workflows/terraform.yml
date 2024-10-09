@@ -2,8 +2,9 @@ name: 'Terraform'
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "non-existent-branch" ]
   pull_request:
+    branches: [ "non-existent-branch" ]
 
 permissions:
   contents: read
