@@ -2,6 +2,7 @@ package com.github.cloudfilemanager.service.impl;
 
 import com.github.cloudfilemanager.configuration.CloudConfiguration;
 import com.github.cloudfilemanager.entity.FileEntity;
+import com.github.cloudfilemanager.exception.custom.FileAlreadyExistsException;
 import com.github.cloudfilemanager.exception.custom.FileNotFoundException;
 import com.github.cloudfilemanager.repository.FileRepository;
 import com.github.cloudfilemanager.s3.S3Service;
@@ -36,12 +37,23 @@ public class FileServiceImpl implements FileService {
         String fileName = file.getOriginalFilename();
         log.info("Uploading file: {}", fileName);
 
+        validateExistingFile(fileName);
+
         try {
             s3Service.putObject(fileName, file.getBytes());
             saveMetadataFile(file);
             log.info("File uploaded successfully.");
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void validateExistingFile(String fileName) {
+        final boolean existFile = fileRepository.existsByFileNameIgnoreCase(fileName);
+
+        if (existFile) {
+            log.error("File already exists: {}", fileName);
+            throw new FileAlreadyExistsException(fileName);
         }
     }
 

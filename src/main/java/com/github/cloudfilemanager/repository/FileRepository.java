@@ -17,4 +17,6 @@ public interface FileRepository extends JpaRepository<FileEntity, UUID> {
 
     Optional<FileEntity> findByFileNameIgnoreCase(String fileName);
 
+    boolean existsByFileNameIgnoreCase(String fileName);
+
 }
