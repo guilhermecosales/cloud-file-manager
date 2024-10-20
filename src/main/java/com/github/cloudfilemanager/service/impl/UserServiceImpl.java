@@ -5,6 +5,8 @@ import com.github.cloudfilemanager.repository.UserRepository;
 import com.github.cloudfilemanager.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,11 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodePassword(user.getPassword()));
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Override
