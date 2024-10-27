@@ -8,7 +8,7 @@ spring:
     show-sql: true
 
 aws:
-  region: ${AWS_REGION}
-  access-key: ${AWS_ACCESS_KEY_ID}
-  secret-key: ${AWS_SECRET_ACCESS_KEY}
-  bucket-name: ${AWS_S3_BUCKET_NAME}
+  region: us-east-1
+  access-key: access-key-test
+  secret-key: secret-key-test
+  bucket-name: bucket-name-test
