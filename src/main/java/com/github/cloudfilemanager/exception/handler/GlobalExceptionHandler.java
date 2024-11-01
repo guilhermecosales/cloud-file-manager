@@ -1,6 +1,7 @@
 package com.github.cloudfilemanager.exception.handler;
 
 import com.github.cloudfilemanager.exception.custom.FileAlreadyExistsException;
+import com.github.cloudfilemanager.exception.custom.InvalidJwtException;
 import com.github.cloudfilemanager.exception.custom.UnauthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
@@ -8,10 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -42,7 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ProblemDetail> handleUnauthorizedException(UnauthorizedException e) {
         log.error("Unauthorized: {}", e.getMessage(), e);
 
-        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final HttpStatus status = HttpStatus.UNAUTHORIZED;
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, e.getMessage());
 
         return ResponseEntity.status(status).body(problemDetail);
@@ -58,6 +61,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(status).body(problemDetail);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ProblemDetail> handleAccessDeniedException(AccessDeniedException e) {
+        log.error("File already exist: {}", e.getMessage(), e);
+
+        final HttpStatus status = HttpStatus.FORBIDDEN;
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, e.getMessage());
+
+        return ResponseEntity.status(status).body(problemDetail);
+    }
+
+    @ExceptionHandler(InvalidJwtException.class)
+    public ResponseEntity<ProblemDetail> handleAccessDeniedException(InvalidJwtException e) {
+        log.error("File already exist: {}", e.getMessage(), e);
+
+        final HttpStatus status = HttpStatus.FORBIDDEN;
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, e.getMessage());
+
+        return ResponseEntity.status(status).body(problemDetail);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleGenericException(Exception e) {
